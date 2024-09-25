@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import CommunityPostDetail from "./components/CommunityPostDetail/CommunityPostDetail";
+import CommunityWritePost from "./components/CommunityWritePost/CommunityWritePost";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/community" element={<CommunityPage />} />
       <Route path="/community/:id" element={<CommunityPostDetail />} />
+      <Route path="/writepost" element={<CommunityWritePost />} />
       <Route path="/question" element={<QuestionAndAnswerPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
