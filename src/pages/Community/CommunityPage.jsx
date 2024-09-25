@@ -2,42 +2,24 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../../layout/Navbar/Navbar";
 import { Link } from "react-router-dom";
 import "./CommunityPage.style.css";
-import axios from "axios";
-
-// test Code
-const posts = [
-  { id: 1, title: "테스트1", author: "차지태", date: "2024.09.24" },
-  { id: 2, title: "테스트2", author: "이충현", date: "2024.09.25" },
-  { id: 3, title: "테스트3", author: "배준형", date: "2024.09.26" },
-  { id: 4, title: "테스트4", author: "최근호", date: "2024.09.27" },
-  { id: 5, title: "테스트5", author: "배대한", date: "2024.09.28" },
-  { id: 6, title: "테스트6", author: "이선재", date: "2024.09.29" },
-  { id: 7, title: "테스트7", author: "차지태", date: "2024.09.30" },
-  { id: 8, title: "테스트8", author: "이충현", date: "2024.09.31" },
-  { id: 9, title: "테스트9", author: "배준형", date: "2024.10.01" },
-  { id: 10, title: "테스트10", author: "최근호", date: "2024.10.02" },
-  { id: 11, title: "테스트11", author: "배대한", date: "2024.10.03" },
-  { id: 12, title: "테스트12", author: "이선재", date: "2024.10.04" },
-];
+import { fetchPosts } from "../../getPosts";
 
 export default function CommunityPage() {
-  // 백엔드 page 요청 useEffect
-  //   const [posts, setPosts] = useState([]);
-  //   useEffect(() => {
-  //     const fetchPosts = async () => {
-  //       try {
-  //         // 백엔드 주소 넣어야함
-  //         const response = await axios.get();
-  //         setPosts(response.data);
-  //       } catch (error) {
-  //         console.log("Error Code", error);
-  //       }
-  //     };
-  //     fetchPosts();
-  //   }, []);
-
+  const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      try {
+        const fetchedPosts = await fetchPosts(); // 백엔드에서 게시글 데이터 불러오기
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error("게시글을 불러오지 못했습니다.", error);
+      }
+    };
+    loadPosts();
+  }, []);
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
