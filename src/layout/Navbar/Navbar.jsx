@@ -1,18 +1,42 @@
-import React, { useEffect, useState } from "react";
 import Logo from "/public/images/NavbarImage/LogoNoneText.png";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.style.css";
 
-export default function Banner() {
+export default function Navbar() {
   const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const userSession = sessionStorage.getItem("user");
+
     if (userSession) {
-      setIsLoggedIn(true);
+      try {
+        const user = JSON.parse(userSession);
+        setUserName(user.name);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("사용자 세션 파싱에 실패했습니다:", error);
+        sessionStorage.removeItem("user");
+      }
     }
   }, []);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUserName("");
+    alert("로그아웃되었습니다.");
+    setDropdownVisible(false);
+  };
+
+  const handleNavigateToMypage = () => {
+    navigate("/mypage");
+    setDropdownVisible(false);
+  };
 
   const homePageNavigate = () => {
     navigate("/");
@@ -26,11 +50,13 @@ export default function Banner() {
     navigate("/question");
   };
 
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
   const loginNavigate = () => {
     if (isLoggedIn) {
-      sessionStorage.removeItem("user");
-      setIsLoggedIn(false);
-      alert("로그아웃되었습니다.");
+      toggleDropdown();
     } else {
       navigate("/login");
     }
@@ -39,7 +65,7 @@ export default function Banner() {
   return (
     <div className="navbarContainer">
       <div className="navbarHomeNavigateContainer" onClick={homePageNavigate}>
-        <img className="navbarNavigate navbarLogo" src={Logo} />
+        <img className="navbarNavigate navbarLogo" src={Logo} alt="Logo" />
         <div className="navbarNavigate navbarHomeAnchor">FCM</div>
       </div>
       <div className="navbarNavigateSet">
@@ -49,8 +75,24 @@ export default function Banner() {
         <div className="navbarNavigate" onClick={questionAnswerNavigate}>
           Q&A
         </div>
-        <div className="navbarNavigate" onClick={loginNavigate}>
-          {isLoggedIn ? "로그아웃" : "로그인"}
+
+        <div className="navbarDropdown">
+          <div className="navbarNavigate" onClick={loginNavigate}>
+            {isLoggedIn ? `${userName}님 ▼` : "로그인"}
+          </div>
+          {isLoggedIn && dropdownVisible && (
+            <div className="navbarDropdownMenu">
+              <div
+                className="navbarDropdownItem"
+                onClick={handleNavigateToMypage}
+              >
+                내 기록
+              </div>
+              <div className="navbarDropdownItem" onClick={handleLogout}>
+                로그아웃
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
