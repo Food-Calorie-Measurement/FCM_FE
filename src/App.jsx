@@ -9,6 +9,8 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import CommunityPostDetail from "./components/CommunityPostDetail/CommunityPostDetail";
 import CommunityWritePost from "./components/CommunityWritePost/CommunityWritePost";
+import Calendar from "./pages/Calendar/Calendar";
+import DietDetail from "./components/DietDetail/DietDetail";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
       <Route path="/question" element={<QuestionAndAnswerPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/myCalendar" element={<Calendar />} />
+      <Route path="/myCalendar/:date" element={<DietDetail />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
