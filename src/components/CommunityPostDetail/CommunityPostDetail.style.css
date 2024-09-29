@@ -1,3 +1,41 @@
 .postDetailContainer {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.postDetailContentContainer {
+  width: 60%;
+  margin-top: 2%;
+  height: 60vh;
+  border-bottom: 1px solid #727272;
+}
+
+.postDetailDate {
+  font-family: "NanumSqueareNeoDEB";
+  color: #727272;
+  font-size: 15px;
+}
+
+.postDetailTitle {
+  color: black;
+  font-family: "NanumSqueareNeoDEB";
+  font-size: 40px;
+}
+
+.postDetailContent {
+  color: #404040;
+  font-family: "NanumSqueareNeoCBD";
+  font-size: 15px;
+  width: 100%;
+}
+
+.postDetailCommunityPass {
+  outline: none;
+  border: none;
+  background-color: white;
+  margin-top: 2%;
+  font-family: "NanumSqueareNeoDEB";
 }
