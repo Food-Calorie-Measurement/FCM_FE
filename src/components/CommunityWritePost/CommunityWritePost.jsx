@@ -1,24 +1,57 @@
 import React, { useState } from "react";
-import Navbar from "../../layout/Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Navbar from "../../layout/Navbar/Navbar.jsx";
 import "./CommunityWritePost.style.css";
 
-export default function CommunityWritePost() {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [password, setPassword] = useState("");
-  const [content, setContent] = useState("");
+export default function LoginPage() {
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const userString = sessionStorage.getItem("user");
+    const user = JSON.parse(userString);
+
+    const writer = user.name;
+
+    const queryParams = new URLSearchParams(location.search);
+    const boardGrade = queryParams.get("boardGrade");
+
+    const adjustedPassword = password === "" ? null : password;
 
     const postData = {
       title,
-      author,
-      password,
       content,
+      writer,
+      boardGrade,
+      password: adjustedPassword,
     };
 
-    console.log(postData);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/posts/create",
+        postData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        navigate(`/${boardGrade}`);
+      } else {
+        console.error("글작성 실패");
+      }
+    } catch (error) {
+      console.error("에러 발생:", error);
+    }
   };
 
   return (
@@ -38,17 +71,6 @@ export default function CommunityWritePost() {
           />
         </div>
         <div className="formGroup">
-          <label htmlFor="author">작성자</label>
-          <input
-            type="text"
-            id="author"
-            placeholder="이름을 입력하세요."
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            required
-          />
-        </div>
-        <div className="formGroup">
           <label htmlFor="password">비밀번호 등록</label>
           <input
             type="password"
@@ -56,7 +78,6 @@ export default function CommunityWritePost() {
             placeholder="비밀번호를 입력하세요."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
         </div>
         <div className="formContentGroup">
